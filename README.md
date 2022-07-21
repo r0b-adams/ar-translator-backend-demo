@@ -5,7 +5,7 @@ Demo to check out [Google Translate API](https://cloud.google.com/nodejs/docs/re
 ## Installation
 
 ```
-git clone asdfasfdasd
+git clone https://github.com/r0b-adams/ar-translator-backend-demo.git
 npm i
 ```
 
