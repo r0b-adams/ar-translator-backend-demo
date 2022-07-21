@@ -1,6 +1,6 @@
 # ar-translator-backend-demo
 
-Demo to check out [Google Translate Node Client](https://cloud.google.com/nodejs/docs/reference/translate/latest/translate/v2.translate#_google_cloud_translate_v2_Translate_translate_member_1_)
+Demo to check out [Google Translate Node.js Client](https://cloud.google.com/nodejs/docs/reference/translate/latest/translate/v2.translate#_google_cloud_translate_v2_Translate_translate_member_1_)
 
 ## Installation
 
