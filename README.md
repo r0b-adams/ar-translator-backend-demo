@@ -9,6 +9,15 @@ git clone https://github.com/r0b-adams/ar-translator-backend-demo.git
 npm i
 ```
 
+Note: A project must be created via the [Google Cloud developer console](https://cloud.google.com/translate/docs/setup) and the Translate API explicitly enabled in order to use.
+
+Create a `.env` file and add the following:
+
+```
+GOOGLE_CLOUD_PROJECT_ID=yourProjectId
+GOOGLE_CLOUD_PROJECT_KEY=yourApiKey
+```
+
 ## Use
 
 Run the following to start the server:
