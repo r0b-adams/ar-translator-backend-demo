@@ -21,12 +21,12 @@ nodemon server.js
 
 ## Endpoints
 
-### GET /languages
+### GET /translateAPI/languages
 
 Response: JSON array of objects with shape:
 `{ code: string, name: string }`
 
-### POST /translate
+### POST /translateAPI/translate
 
 Request body: JSON object with shape: `{ "text": string, "to": string, "from": string}`
 
@@ -37,3 +37,5 @@ Request body: JSON object with shape: `{ "text": string, "to": string, "from": s
 - from: a [two-letter code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) representing the source language
 
 Response: JSON object with shape `{ "result": string }`
+
+### POST
