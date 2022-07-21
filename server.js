@@ -8,7 +8,7 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static('public')); // UI files
+app.use(express.static('client')); // UI files
 app.use(routes);
 
 // catch all error
