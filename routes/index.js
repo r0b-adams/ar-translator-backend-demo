@@ -1,8 +1,9 @@
-const { postTranslate, getLanguages } = require('../controllers');
 const router = require('express').Router();
 
-router.post('/translate', postTranslate);
+const translateAPI = require('./translate');
+const visionAPI = require('./vision');
 
-router.get('/languages', getLanguages);
+router.use(translateAPI);
+router.use(visionAPI);
 
 module.exports = router;

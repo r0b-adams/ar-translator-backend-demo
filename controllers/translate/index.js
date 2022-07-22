@@ -1,4 +1,4 @@
-const translator = require('../config');
+const { translator } = require('../../google_apis/clients');
 
 const postTranslate = async (req, res) => {
   try {

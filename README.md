@@ -9,14 +9,7 @@ git clone https://github.com/r0b-adams/ar-translator-backend-demo.git
 npm i
 ```
 
-Note: A project must be created via the [Google Cloud developer console](https://cloud.google.com/translate/docs/setup) and the Translate API explicitly enabled in order to use.
-
-Create a `.env` file and add the following:
-
-```
-GOOGLE_CLOUD_PROJECT_ID=yourProjectId
-GOOGLE_CLOUD_PROJECT_KEY=yourApiKey
-```
+A project must be created via the [Google Cloud developer console](https://cloud.google.com/translate/docs/setup) and the Translate and Vision APIs explicitly enabled in order to use. An associated [service account and JSON key](https://cloud.google.com/translate/docs/setup#creating_service_accounts_and_keys) file are also required. Save the JSON key file in the `/google_apis/auth` folder with the name `GOOGLE_APPLICATION_CREDENTIALS.json`. The JSON key file will authenticate both Google Translate and Google Vision APIs.
 
 ## Use
 
@@ -30,12 +23,12 @@ nodemon server.js
 
 ## Endpoints
 
-### GET /languages
+### GET /translateAPI/languages
 
 Response: JSON array of objects with shape:
 `{ code: string, name: string }`
 
-### POST /translate
+### POST /translateAPI/translate
 
 Request body: JSON object with shape: `{ "text": string, "to": string, "from": string}`
 
@@ -46,3 +39,11 @@ Request body: JSON object with shape: `{ "text": string, "to": string, "from": s
 - from: a [two-letter code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) representing the source language
 
 Response: JSON object with shape `{ "result": string }`
+
+### POST /visionAPI/objects
+
+Currently, this endpoint reads an image from disk, converts it to base64 encoding, and sends that data to Google via the Vision Node.js client.
+
+Would like to be able to receive base64 data from the client to just forward to Google API.
+
+- Mimics this [guide](https://cloud.google.com/vision/docs/object-localizer)
