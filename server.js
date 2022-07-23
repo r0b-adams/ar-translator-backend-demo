@@ -13,12 +13,7 @@ app.use(
   })
 );
 app.use(express.json({ limit: FILE_UPLOAD_LIMIT }));
-
-// UI files (by default, looks for 'index.html')
-// https://expressjs.com/en/4x/api.html#express.static
-// handles the '/' root lvl endpoint
 app.use(express.static('client'));
-
 app.use(routes);
 
 // catch all for unrecognized endpoints
