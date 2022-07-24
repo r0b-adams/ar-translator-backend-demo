@@ -1,6 +1,6 @@
-# ar-translator-backend-demo
+# ar-vision-translator-backend-demo
 
-Demo to check out [Google Translate Node.js Client](https://cloud.google.com/nodejs/docs/reference/translate/latest/translate/v2.translate#_google_cloud_translate_v2_Translate_translate_member_1_)
+Demo to check out [Google Translate Node.js Client](https://cloud.google.com/nodejs/docs/reference/translate/latest/translate/v2.translate#_google_cloud_translate_v2_Translate_translate_member_1_) and [Google Vision Node.js Client](https://cloud.google.com/nodejs/docs/reference/vision/latest)
 
 ## Installation
 
@@ -21,29 +21,28 @@ nodemon server.js
 
 `Ctrl + C` to quit
 
+Open a browser and enter `localhost:3000` in the URL (your port of choice can be defined in `server.js`).
+
+Select a file to upload
+
+Application will display server JSON response
+
 ## Endpoints
 
 ### GET /translateAPI/languages
 
-Response: JSON array of objects with shape:
-`{ code: string, name: string }`
+Fetch languages from the Google Translate API
+
+Returns an array of objects describing languages and their [two-letter codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
 
 ### POST /translateAPI/translate
 
-Request body: JSON object with shape: `{ "text": string, "to": string, "from": string}`
+Fetch a translation of text from a source language to a target language
 
-- text: string to be translated
-
-- to: a [two-letter code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) representing the target language
-
-- from: a [two-letter code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) representing the source language
-
-Response: JSON object with shape `{ "result": string }`
+Returns a string of translated text
 
 ### POST /visionAPI/objects
 
-Currently, this endpoint reads an image from disk, converts it to base64 encoding, and sends that data to Google via the Vision Node.js client.
+Fetch recognized objects and metadata from the Google Vision API
 
-Would like to be able to receive base64 data from the client to just forward to Google API.
-
-- Mimics this [guide](https://cloud.google.com/vision/docs/object-localizer)
+Returns array of recognized objects and normalized bounding-box verticies
