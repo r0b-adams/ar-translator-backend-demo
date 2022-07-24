@@ -3,6 +3,7 @@ let blobURL;
 
 const input = document.getElementById('input');
 const preview = document.getElementById('preview');
+const output = document.getElementById('output');
 
 input.onchange = (event) => {
   try {
@@ -39,7 +40,7 @@ const fetchImageObjects = async (e) => {
       body: JSON.stringify({ img: b64img }),
     });
     const data = await response.json();
-    console.log(data);
+    output.textContent = JSON.stringify(data, undefined, 2);
   } catch (error) {
     console.error(error);
   }
