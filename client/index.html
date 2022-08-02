@@ -15,18 +15,31 @@
   </head>
   <body>
     <div class="container">
-      <h1>Google Vision Object Recognition Demo</h1>
+      <h1>Google Vision + Translate Object Recognition Demo</h1>
 
-      <div class="flex flex-col">
-        <label for="name">Upload a .jpg or .png file</label>
-        <input id="input" type="file" accept="image/jpeg, image/png"/>
-      </div>
+      <div class="stack">
+
+        <div class="flex flex-col" style="width: 200px">
+          <label for="target">Choose a target language:</label>
+          <select name="target" id="trg">
+          </select>
+        </div>
+
+        <div class="flex flex-col">
+          <label for="name">Upload a .jpg or .png file</label>
+          <input id="input" type="file" accept="image/jpeg, image/png"/>
+        </div>
+
         <div>
           <img id="preview"/>
         </div>
+
         <div>
+          <h4>JSON response:</h4>
           <textarea class="hide-scrollbar" id="output" cols="100" rows="20"></textarea>
         </div>
+
+      </div>
 
     <script src="./script.js"></script>
     <script
