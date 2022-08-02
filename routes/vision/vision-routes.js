@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const { analyzeObjects } = require('../../controllers/vision');
+const { localizeObjectsAndTranslate } = require('../../controllers/vision');
 
-router.post('/objects', analyzeObjects);
+router.post('/objects', localizeObjectsAndTranslate);
 
 module.exports = router;
