@@ -6,7 +6,7 @@
   "scripts": {
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
     "start:prod": "node dist/index.js",
-    "start:dev": "cp -f src/client/index.html dist/client && cp -f src/client/style.css dist/client && nodemon --exec ts-node src/index.ts",
+    "start:dev": "nodemon --exec ts-node src/index.ts",
     "postinstall": "",
     "transpile": "tsc && cp -f src/client/index.html dist/client && cp -f src/client/style.css dist/client"
   },

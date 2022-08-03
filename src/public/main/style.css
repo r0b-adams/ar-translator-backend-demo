@@ -35,8 +35,9 @@
 
 #output {
   font-size: 12px;
+  max-width: 100%;
 }
 
 #preview {
-  max-width: 300px;
+  max-width: 100%;
 }

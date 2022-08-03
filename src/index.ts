@@ -1,3 +1,4 @@
+import path from 'path';
 import express from 'express';
 import routes from './routes';
 import { authenticate, catchAll404 } from './middleware';
@@ -14,8 +15,13 @@ app.use(
   })
 );
 app.use(express.json({ limit: FILE_UPLOAD_LIMIT }));
-app.use(express.static('src/client'));
+app.use(express.static('/views'));
 app.use(authenticate);
 app.use(routes);
-app.use(catchAll404);
+app.get('/', (req, res) => {
+  req.userID
+    ? res.sendFile(path.join(__dirname, '/views/main.html'))
+    : res.sendFile(path.join(__dirname, '/views/auth.html'));
+});
+app.use('*', catchAll404);
 app.listen(PORT, () => console.log(`Server listening on ${PORT}`));

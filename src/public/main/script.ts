@@ -1,7 +1,5 @@
-import { LanguageResult } from '@google-cloud/translate/build/src/v2';
-
 let blobURL: string;
-const defaultLangCode = navigator.language;
+const [browserCode] = navigator.language.split('-');
 
 const trgLangSelect = document.getElementById('trg') as HTMLSelectElement;
 const input = document.getElementById('input')! as HTMLInputElement;
@@ -54,7 +52,7 @@ const fetchImageObjects = async (
   }
 };
 
-type Languages = { languages: LanguageResult[] };
+type Languages = { languages: any };
 const loadLanguages = async () => {
   const response = await fetch('/translateAPI/languages', { method: 'GET' });
   const data: Promise<Languages> = await response.json();
@@ -76,6 +74,7 @@ const populateOptions = async (): Promise<void> => {
       trgLangSelect.append(trgOpt);
     }
   }
+  trgLangSelect.value = browserCode;
 };
 
 window.onload = async () => await populateOptions();
