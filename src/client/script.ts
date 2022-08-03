@@ -1,16 +1,19 @@
-let blobURL;
-let defaultLangCode;
+import { LanguageResult } from '@google-cloud/translate/build/src/v2';
 
-const input = document.getElementById('input');
-const preview = document.getElementById('preview');
-const output = document.getElementById('output');
-const trgLangSelect = document.getElementById('trg');
+let blobURL: string;
+const defaultLangCode = navigator.language;
 
-input.onchange = (event) => {
+const trgLangSelect = document.getElementById('trg') as HTMLSelectElement;
+const input = document.getElementById('input')! as HTMLInputElement;
+const preview = document.getElementById('preview') as HTMLImageElement;
+const output = document.getElementById('output') as HTMLTextAreaElement;
+
+input.onchange = (_e): void => {
   try {
-    if (blobURL) URL.revokeObjectURL(blobURL); // remove ref to any previously uploaded file
-    if (event.target.files.length) {
-      const files = event.target.files;
+    // https://developer.mozilla.org/en-US/docs/Web/API/URL#static_methods
+    if (blobURL) URL.revokeObjectURL(blobURL); // remove ref to previously uploaded file
+    if (input.files) {
+      const files = input.files;
       blobURL = URL.createObjectURL(files[0]);
       preview.src = blobURL;
       readImage(files[0]);
@@ -20,18 +23,22 @@ input.onchange = (event) => {
   }
 };
 
+// https://developer.mozilla.org/en-US/docs/Web/API/FileReader
 const reader = new FileReader();
-const readImage = (file) => {
+const readImage = (file: File): void => {
   try {
-    reader.readAsDataURL(file);
     reader.onload = fetchImageObjects;
+    reader.readAsDataURL(file);
   } catch (error) {
     console.error(error);
   }
 };
 
-const fetchImageObjects = async (e) => {
+const fetchImageObjects = async (
+  e: ProgressEvent<FileReader>
+): Promise<void> => {
   try {
+    if (!e.target) return;
     const b64img = e.target.result;
     const response = await fetch('/visionAPI/objects', {
       method: 'POST',
@@ -47,14 +54,15 @@ const fetchImageObjects = async (e) => {
   }
 };
 
-const getLanguages = async () => {
+type Languages = { languages: LanguageResult[] };
+const loadLanguages = async () => {
   const response = await fetch('/translateAPI/languages', { method: 'GET' });
-  const data = await response.json();
+  const data: Promise<Languages> = await response.json();
   return data;
 };
 
-const populateOptions = async () => {
-  const { languages } = await getLanguages();
+const populateOptions = async (): Promise<void> => {
+  const { languages } = await loadLanguages();
 
   if (languages.length) {
     for (let i = 0; i < languages.length; i++) {

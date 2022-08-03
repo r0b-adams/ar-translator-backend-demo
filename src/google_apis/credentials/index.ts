@@ -1,8 +1,8 @@
-const path = require('path');
+import path from 'path';
 
 const keyFilename = path.join(
   __dirname,
   './GOOGLE_APPLICATION_CREDENTIALS.json'
 );
 
-module.exports = keyFilename;
+export default keyFilename;

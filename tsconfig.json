@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "removeComments": true,
+    "noEmitOnError": true,
+    "target": "es6",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "typeRoots": ["src/@types", "node_modules/@types"]
+  }
+}
