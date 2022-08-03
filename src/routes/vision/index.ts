@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import visionRoutes from './vision-routes';
+import visionRoutes from './routes';
 
 const router = Router();
 router.use('/visionAPI', visionRoutes);
