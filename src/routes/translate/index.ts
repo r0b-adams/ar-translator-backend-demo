@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import translateRoutes from './translate-routes';
+import translateRoutes from './routes';
 
 const router = Router();
 router.use('/translateAPI', translateRoutes);

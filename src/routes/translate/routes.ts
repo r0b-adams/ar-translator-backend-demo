@@ -1,5 +1,5 @@
 import { Router } from 'express';
-const { postTranslate, getLanguages } = require('../../controllers/translate');
+import { postTranslate, getLanguages } from '../../controllers/translate';
 
 const router = Router();
 router.get('/languages', getLanguages);

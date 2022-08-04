@@ -36,6 +36,12 @@ export const localizeAndTranslate: RequestHandler = async (req, res) => {
       return res.status(200).json({ message: 'no objects found' });
     }
 
+    // english is only lang option for Google Vision,
+    // so just return the result if English is the target
+    if (to === 'en') {
+      return res.status(200).json(objects);
+    }
+
     // call Google Translate *once* with an array of object names
     const objNames = objects.map((obj) => obj.name!);
     const [translations] = await translator.translate(objNames, {
@@ -53,7 +59,7 @@ export const localizeAndTranslate: RequestHandler = async (req, res) => {
       };
     });
 
-    res.status(200).json(objsWithTranslations);
+    return res.status(200).json(objsWithTranslations);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error });
