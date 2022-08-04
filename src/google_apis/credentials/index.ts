@@ -1,8 +1,5 @@
-import path from 'path';
+import { writeCredentials, keyFilename } from './config';
 
-const keyFilename = path.join(
-  __dirname,
-  './GOOGLE_APPLICATION_CREDENTIALS.json'
-);
+writeCredentials();
 
 export default keyFilename;
