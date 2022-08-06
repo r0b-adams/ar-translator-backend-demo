@@ -1,29 +1,41 @@
 import { annotator, translator } from '../../google_apis/clients';
 import { RequestHandler } from 'express';
+import { google } from '@google-cloud/vision/build/protos/protos';
 
-export const localize: RequestHandler = async (req, res) => {
-  try {
-    const { img } = req.body; // arrives as a string of encoded data of that looks like data:image/[jpeg|png];base64, [encodedASCIIstr]
-    const [, b64encodedImage] = img.split(','); // ignore the prefixes and grab just the b64 str
-
-    const request = {
-      image: { source: b64encodedImage },
-    };
-
-    const [result] = await annotator.objectLocalization!(request);
-    const objects = result.localizedObjectAnnotations;
-
-    res.status(200).json(objects);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error });
-  }
+type LocalizeReqBody = {
+  img: string;
+  to: string;
 };
 
-export const localizeAndTranslate: RequestHandler = async (req, res) => {
+type LocalizeResbody =
+  | google.cloud.vision.v1.ILocalizedObjectAnnotation[]
+  | (google.cloud.vision.v1.ILocalizedObjectAnnotation & {
+      trgLangCode: string;
+      translatedName: string;
+    })[]
+  | { message: string }
+  | { error: unknown };
+
+// TODO: validate req.body
+// expect:
+// img: string -> a string of b64 encoded data representing the image
+//  to: string -> a BCP 47 language tag indicating the language of the voice
+export const localizeAndTranslate: RequestHandler<
+  {},
+  LocalizeResbody,
+  LocalizeReqBody
+> = async (req, res) => {
   try {
-    const { img, to } = req.body;
-    const [, b64encodedImage] = img.split(',');
+    if (!req.userID) {
+      res.status(401).json({ error: 'Please login' });
+      return;
+    }
+
+    const { img, to } = req.body; // arrives as a string of encoded data of that looks like data:image/[jpeg|png];base64, [encodedASCIIstr]
+    const [, b64encodedImage] = img.split(','); // ignore the prefixes and grab just the b64 str
+
+    // TODO: validate b64 string
+    // https://joi.dev/api/?v=17.6.0#stringbase64options
 
     const request = {
       image: { content: b64encodedImage },
@@ -32,14 +44,17 @@ export const localizeAndTranslate: RequestHandler = async (req, res) => {
     const [result] = await annotator.objectLocalization!(request);
     const objects = result.localizedObjectAnnotations;
 
+    // no objects recognized
     if (!objects || !objects.length) {
-      return res.status(200).json({ message: 'no objects found' });
+      res.status(200).json({ message: 'no objects found' });
+      return;
     }
 
-    // english is only lang option for Google Vision,
-    // so just return the result if English is the target
+    // Google Vision only returns results in English
+    // if that is the target, just return data
     if (to === 'en') {
-      return res.status(200).json(objects);
+      res.status(200).json(objects);
+      return;
     }
 
     // call Google Translate *once* with an array of object names
@@ -59,7 +74,7 @@ export const localizeAndTranslate: RequestHandler = async (req, res) => {
       };
     });
 
-    return res.status(200).json(objsWithTranslations);
+    res.status(200).json(objsWithTranslations);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error });
