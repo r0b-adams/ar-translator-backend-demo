@@ -4,17 +4,17 @@ import { User } from './models';
 const data = [
   {
     username: 'spongebob',
-    password: 'password',
+    password: 'imreadyimready',
     email: 'spongebob@squarepants.com',
   },
   {
     username: 'patrick',
-    password: 'password',
+    password: 'weewooweewoo',
     email: 'patrick@star.com',
   },
   {
     username: 'squidward',
-    password: 'password',
+    password: 'everybodysacritic',
     email: 'squidward@tentacles.com',
   },
 ];
