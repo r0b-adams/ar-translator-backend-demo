@@ -24,7 +24,6 @@ export const getUser: RequestHandler<{}, userResBody> = async (req, res) => {
       res.status(401).json({ error: 'Please login' });
       return;
     }
-
     const user = await User.findById(req.userID);
     if (!user) throw new Error('Error fetching user');
     res.status(200).json({ user });
@@ -103,7 +102,6 @@ export const login: RequestHandler<{}, LoginResBody, LoginReqBody> = async (
 ) => {
   try {
     const user = await User.findOne({ username: req.body.username });
-
     if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
       res.status(401).json({ error: 'Wrong username and/or password' });
     } else {

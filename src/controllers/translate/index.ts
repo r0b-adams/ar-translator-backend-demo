@@ -8,7 +8,6 @@ export const getLanguages: RequestHandler<{}, {}, LanguagesResBody> = async (
   req,
   res
 ) => {
-  console.log('GET /translateAPI/languages');
   try {
     if (!req.userID) {
       res.status(401).json({ error: 'Please login' });

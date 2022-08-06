@@ -31,7 +31,8 @@ export const localizeAndTranslate: RequestHandler<
       return;
     }
 
-    const { img, to } = req.body; // arrives as a string of encoded data of that looks like data:image/[jpeg|png];base64, [encodedASCIIstr]
+    // data:image/[jpeg|png];base64, [encodedASCIIstr]
+    const { img, to } = req.body; // img arrives as a string of b64 encoded data
     const [, b64encodedImage] = img.split(','); // ignore the prefixes and grab just the b64 str
 
     // TODO: validate b64 string
