@@ -6,7 +6,6 @@ import { writeFileSync, unlinkSync, existsSync } from 'fs';
 // keyfile to any repo. One solution is to save key/val pairs in environment
 // variables, then gather them into a JSON object and write that to file
 
-// gather data from environment vars
 const {
   type,
   project_id,
@@ -19,9 +18,6 @@ const {
   auth_provider_x509_cert_url,
   client_x509_cert_url,
 } = process.env;
-
-// write to this path
-export const keyFilename = path.join(__dirname, 'data.json');
 
 const credentials = JSON.stringify({
   type,
@@ -36,13 +32,13 @@ const credentials = JSON.stringify({
   client_x509_cert_url,
 });
 
-export const writeCredentials = () => {
+export const keyFilename = path.join(__dirname, 'data.json');
+
+export const writeCredentials = (): void => {
   try {
     writeFileSync(keyFilename, credentials);
   } catch (error) {
     console.error(error);
-
-    // make sure file is removed if error
     if (existsSync(keyFilename)) unlinkSync(keyFilename);
   }
 };
