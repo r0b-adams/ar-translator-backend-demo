@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { model, Model, Schema, Document } from 'mongoose';
-import validate from './validate';
+import handleValidate from './validation';
 import { Constants, PayloadType } from './constants';
 
 const { MAX_LENGTH, MIN_LENGTH, SALT_ROUNDS } = Constants;
@@ -22,7 +22,7 @@ const userSchema = new Schema<User>(
       trim: true,
       maxlength: [MAX_LENGTH, `maximum username length is ${MAX_LENGTH}`],
       validate: {
-        validator: validate(USERNAME),
+        validator: handleValidate(USERNAME),
         message: (_props) => 'invalid username',
       },
     },
@@ -31,7 +31,7 @@ const userSchema = new Schema<User>(
       required: [true, 'email is required'],
       trim: true,
       validate: {
-        validator: validate(EMAIL),
+        validator: handleValidate(EMAIL),
         message: (_props) => `invalid email`,
       },
     },
@@ -42,7 +42,7 @@ const userSchema = new Schema<User>(
       minlength: [MIN_LENGTH, `password length must be at least ${MIN_LENGTH}`],
       maxlength: [MAX_LENGTH, `maximum password length is ${MAX_LENGTH}`],
       validate: {
-        validator: validate(PASSWORD),
+        validator: handleValidate(PASSWORD),
         message: (_props) => 'invalid password',
       },
     },
