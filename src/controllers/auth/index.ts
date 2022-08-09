@@ -1,69 +1,40 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { User } from '../../db/models';
+
+// types
 import { RequestHandler } from 'express';
-import { Types } from 'mongoose';
+import ReqBody from '../../@types/requests';
+import ResBody from '../../@types/responses';
 
 const { SECRET_KEY } = process.env;
+const TOKEN_OPTS = { expiresIn: '24h' };
 
-const TOKEN_OPTS = {
-  expiresIn: '24h',
-};
-
-type userResBody =
-  | {
-      user: User & {
-        _id: Types.ObjectId;
-      };
-    }
-  | { error: unknown };
-
-export const getUser: RequestHandler<{}, userResBody> = async (req, res) => {
+/*
+ * GET /auth/users
+ */
+export const getUser: RequestHandler<{}, ResBody.Auth> = async (req, res) => {
   try {
     if (!req.userID) {
       res.status(401).json({ error: 'Please login' });
       return;
     }
     const user = await User.findById(req.userID);
-    if (!user) throw new Error('Error fetching user');
+    if (!user) throw new Error();
     res.status(200).json({ user });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error });
+    res.status(500).json({ error: 'Error fetching user' });
   }
 };
 
-// TODO: add validation to req.body
-// expect:
-// username: string -> min:8, max:32, alphanumeric,
-// password: string -> min:12, max:64, alphanumeric, ! @ # $ % & ?
-// email: string -> <name>@<domain>
-type RegisterReqBody = {
-  email: string;
-  username: string;
-  password: string;
-};
-
-type RegisterResBody =
-  | {
-      token: string;
-      user: User & {
-        _id: Types.ObjectId;
-      };
-    }
-  | { error: string };
-
-// TODO: add validation to req.body
-// username and email should be unique
-// expect:
-// email: string
-// username: string
-// password: string
-export const register: RequestHandler<
-  {},
-  RegisterResBody,
-  RegisterReqBody
-> = async (req, res) => {
+/**
+ * POST /auth/register
+ */
+export const register: RequestHandler<{}, ResBody.Auth, ReqBody.Auth> = async (
+  req,
+  res
+) => {
   try {
     let user = await User.findOne({ username: req.body.username });
     if (user) {
@@ -78,25 +49,10 @@ export const register: RequestHandler<
   }
 };
 
-// TODO: add validation to req.body
-// expect:
-// username: string
-// email: string
-type LoginReqBody = {
-  username: string;
-  password: string;
-};
-
-type LoginResBody =
-  | {
-      token: string;
-      user: User & {
-        _id: Types.ObjectId;
-      };
-    }
-  | { error: string };
-
-export const login: RequestHandler<{}, LoginResBody, LoginReqBody> = async (
+/*
+ * POST /auth/login
+ */
+export const login: RequestHandler<{}, ResBody.Auth, ReqBody.Auth> = async (
   req,
   res
 ) => {
@@ -113,6 +69,9 @@ export const login: RequestHandler<{}, LoginResBody, LoginReqBody> = async (
   }
 };
 
+/*
+ * DELETE /auth/logout
+ */
 export const logout: RequestHandler = async (req, res) => {
   req.userID ? res.sendStatus(204) : res.sendStatus(403);
 };
