@@ -3,7 +3,7 @@ import { getUser, register, login, logout } from '../../controllers/auth';
 
 const router = Router();
 
-router.get('/user', getUser);
+router.get('/users', getUser);
 router.post('/register', register);
 router.post('/login', login);
 router.delete('/logout', logout);
