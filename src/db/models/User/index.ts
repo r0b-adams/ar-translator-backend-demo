@@ -19,7 +19,7 @@ const userSchema = new Schema<User>(
       type: String,
       required: [true, 'username is required'],
       trim: true,
-      maxlength: [MAX_LENGTH, 'password must be less than 32 chars'],
+      maxlength: [MAX_LENGTH, `maximum username length is ${MAX_LENGTH}`],
       validate: {
         validator: validate(USERNAME),
         message: (_props) => 'invalid username',
@@ -29,7 +29,6 @@ const userSchema = new Schema<User>(
       type: String,
       required: [true, 'email is required'],
       trim: true,
-      maxlength: [MAX_LENGTH, 'password must be less than 32 chars'],
       validate: {
         validator: validate(EMAIL),
         message: (_props) => `invalid email`,
@@ -39,8 +38,8 @@ const userSchema = new Schema<User>(
       type: String,
       required: [true, 'password is required'],
       trim: true,
-      minlength: [MIN_LENGTH, 'password must be at least 12 chars'],
-      maxlength: [MAX_LENGTH, 'password must be less than 32 chars'],
+      minlength: [MIN_LENGTH, `password length must be at least ${MIN_LENGTH}`],
+      maxlength: [MAX_LENGTH, `maximum password length is ${MAX_LENGTH}`],
       validate: {
         validator: validate(PASSWORD),
         message: (_props) => 'invalid password',
