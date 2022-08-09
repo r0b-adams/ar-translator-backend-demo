@@ -19,5 +19,3 @@ export const handleValidate = (type: string) => (payload: string) => {
   const { error } = schema.validate(payload);
   return error ? false : true; // error undefined if payload is valid
 };
-
-export default handleValidate;
