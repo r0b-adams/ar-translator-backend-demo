@@ -1,4 +1,4 @@
-import translator from './_translator';
-import annotator from './_annotator';
+import translator from './translate';
+import annotator from './vision';
 
 export { translator, annotator };
