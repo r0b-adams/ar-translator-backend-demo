@@ -1,10 +1,13 @@
 import { translator } from '../../google_apis/clients';
 import { RequestHandler } from 'express';
-import { LanguageResult } from '@google-cloud/translate/build/src/v2';
+import ReqBody from '../../@types/requests';
+import ResBody from '../../@types/responses';
+import Joi from 'joi';
 
-type LanguagesResBody = { languages: LanguageResult[] } | { error: unknown };
-
-export const getLanguages: RequestHandler<{}, {}, LanguagesResBody> = async (
+/*
+ * GET /translateAPI/languages
+ */
+export const getLanguages: RequestHandler<{}, {}, ResBody.Languages> = async (
   req,
   res
 ) => {
@@ -14,24 +17,19 @@ export const getLanguages: RequestHandler<{}, {}, LanguagesResBody> = async (
       return;
     }
     const [languages] = await translator.getLanguages();
-    res.status(200).json({ languages });
+    res.status(200).json(languages);
   } catch (error) {
     res.status(500).json({ error });
   }
 };
 
-type TranslateReqBody = {
-  text: string;
-  from: string;
-  to: string;
-};
-
-type TranslateResBody = { result: string } | { error: unknown };
-
+/*
+ * POST /translateAPI/translate
+ */
 export const postTranslate: RequestHandler<
   {},
-  TranslateResBody,
-  TranslateReqBody
+  ResBody.Translation,
+  ReqBody.Translate
 > = async (req, res) => {
   try {
     if (!req.userID) {
@@ -39,6 +37,14 @@ export const postTranslate: RequestHandler<
       return;
     }
     const { text, from, to } = req.body;
+
+    const body = Joi.object({
+      text: Joi.string(),
+      from: Joi.string(),
+      to: Joi.string()
+    })
+
+
     const [result] = await translator.translate(text, { from, to });
     res.status(200).json({ result });
   } catch (error) {
