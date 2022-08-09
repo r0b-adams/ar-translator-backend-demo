@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import { model, Model, Schema, Document } from 'mongoose';
-import { validate, PayloadType, Constants } from './userValidation';
+import validate from './validate';
+import { Constants, PayloadType } from './constants';
 
 const { MAX_LENGTH, MIN_LENGTH, SALT_ROUNDS } = Constants;
 const { USERNAME, PASSWORD, EMAIL } = PayloadType;
