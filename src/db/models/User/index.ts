@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { model, Model, Schema, Document } from 'mongoose';
-import handleValidate from './validation';
+import { handleValidate, joi_userSchema } from './validation';
 import { Constants, PayloadType } from './constants';
 
 const { MAX_LENGTH, MIN_LENGTH, SALT_ROUNDS } = Constants;
@@ -57,4 +57,5 @@ userSchema.pre<User>('save', async function () {
 
 const User: Model<User> = model('User', userSchema);
 
+export { handleValidate, joi_userSchema };
 export default User;
