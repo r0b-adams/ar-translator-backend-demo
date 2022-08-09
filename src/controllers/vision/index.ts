@@ -1,20 +1,8 @@
 import { annotator, translator } from '../../google_apis/clients';
+import Joi from 'joi';
 import { RequestHandler } from 'express';
-import { google } from '@google-cloud/vision/build/protos/protos';
-
-type LocalizeReqBody = {
-  img: string;
-  to: string;
-};
-
-type LocalizeResbody =
-  | google.cloud.vision.v1.ILocalizedObjectAnnotation[]
-  | (google.cloud.vision.v1.ILocalizedObjectAnnotation & {
-      trgLangCode: string;
-      translatedName: string;
-    })[]
-  | { message: string }
-  | { error: unknown };
+import ReqBody from '../../@types/requests';
+import ResBody from '../../@types/responses';
 
 // TODO: validate req.body
 // expect:
@@ -22,8 +10,8 @@ type LocalizeResbody =
 //  to: string -> a BCP 47 language tag indicating the language of the voice
 export const localizeAndTranslate: RequestHandler<
   {},
-  LocalizeResbody,
-  LocalizeReqBody
+  ResBody.Vision,
+  ReqBody.Vision
 > = async (req, res) => {
   try {
     if (!req.userID) {
@@ -31,13 +19,24 @@ export const localizeAndTranslate: RequestHandler<
       return;
     }
 
-    // data:image/[jpeg|png];base64, [encodedASCIIstr]
+    // TODO: validate dataURI
+    // https://joi.dev/api/?v=17.6.0#stringdataurioptions
+    // data:image/[jpeg|png];base64, <encodedASCIIstr>
     const { img, to } = req.body; // img arrives as a string of b64 encoded data
     const [, b64encodedImage] = img.split(','); // ignore the prefixes and grab just the b64 str
+
+    // TESTING VALIDATION SCHEMA
+    const body = Joi.object({
+      img: Joi.string().dataUri(),
+      to: Joi.string().max(2),
+    });
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
 
     // TODO: validate b64 string
     // https://joi.dev/api/?v=17.6.0#stringbase64options
 
+    const b64 = Joi.string().base64();
     const request = {
       image: { content: b64encodedImage },
     };
