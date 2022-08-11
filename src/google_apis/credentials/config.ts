@@ -38,7 +38,10 @@ export const writeCredentials = (): void => {
   try {
     writeFileSync(keyFilename, credentials);
   } catch (error) {
-    console.error(error);
+    if (error instanceof Error) {
+      console.log(error.message);
+    }
+  } finally {
     if (existsSync(keyFilename)) unlinkSync(keyFilename);
   }
 };
