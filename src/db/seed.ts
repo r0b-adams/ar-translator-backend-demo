@@ -1,5 +1,5 @@
 import db from '.';
-import { User } from './models';
+import User from './models';
 
 const data = [
   {
