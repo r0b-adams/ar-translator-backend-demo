@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { model, Model, Schema, Document } from 'mongoose';
 
-import { Constants } from './constants';
+import { Constants } from '../../../helpers/constants';
 
 const { SALT_ROUNDS } = Constants;
 

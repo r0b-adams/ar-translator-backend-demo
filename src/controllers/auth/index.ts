@@ -6,11 +6,11 @@ import { RequestHandler } from 'express';
 import User from '../../db/models';
 import ReqBody from '../../@types/requests';
 import ResBody from '../../@types/responses';
-import { Constants } from '../../db/models/User/constants';
+import { Constants } from '../../helpers/constants';
 import { AuthError, QueryError, UniquenessError } from '../../helpers/errors';
 
-const { SECRET_KEY } = process.env;
 const TOKEN_OPTS = { expiresIn: '24h' };
+const { SECRET_KEY } = process.env;
 const { MIN_LENGTH, PASSWORD_REGEX } = Constants;
 
 /*
