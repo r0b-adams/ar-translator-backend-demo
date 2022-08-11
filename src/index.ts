@@ -2,7 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import db from './db';
 import router from './routes';
-import { authenticate, catchAll404 } from './middleware';
+import { authenticate, _404 } from './middleware';
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -15,6 +15,6 @@ const FILE_UPLOAD_LIMIT = '100mb';
   app.use(express.urlencoded({ limit: FILE_UPLOAD_LIMIT, extended: false }));
   app.use(authenticate);
   app.use(router);
-  app.use(catchAll404);
+  app.use(_404);
   app.listen(PORT, () => console.log(`server listening on ${PORT}`));
 })();
