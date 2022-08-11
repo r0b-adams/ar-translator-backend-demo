@@ -1,7 +1,7 @@
-import { Types } from 'mongoose';
-import { User } from '../db/models';
+import { ObjectId } from 'mongoose';
 import { google } from '@google-cloud/vision/build/protos/protos';
 import { LanguageResult } from '@google-cloud/translate/build/src/v2';
+import { UserDoc } from '../db/models/User';
 
 declare namespace ResBody {
   /*
@@ -9,23 +9,23 @@ declare namespace ResBody {
    */
   type Result = { result: string };
   type Message = { message: string };
-  type Error = { error: string | unknown };
+  type Error = { error: string } | { errors: string[] };
 
   /*
    * auth responses
    */
   type Profile = {
-    user: User & { _id: Types.ObjectId };
+    user: UserDoc & { _id: ObjectId };
     token?: string;
   };
 
-  export type Auth = Profile | Message | Error;
+  type Auth = Profile | Message | Error;
 
   /*
    * translate reponses
    */
-  export type Languages = LanguageResult[] | Message | Error;
-  export type Translation = Result | Message | Error;
+  type Languages = LanguageResult[] | Message | Error;
+  type Translation = Result | Message | Error;
 
   /*
    * vision responses
@@ -39,7 +39,7 @@ declare namespace ResBody {
     translatedName: string;
   })[];
 
-  export type Vision =
+  type Vision =
     | AnnotationResponse
     | TranslatedAnnotationResponse
     | Message
