@@ -40,8 +40,7 @@ export const writeCredentials = (): void => {
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message);
+      if (existsSync(keyFilename)) unlinkSync(keyFilename);
     }
-  } finally {
-    if (existsSync(keyFilename)) unlinkSync(keyFilename);
   }
 };
