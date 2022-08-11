@@ -1,37 +1,27 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import Joi from 'joi';
 import { RequestHandler } from 'express';
 
 import User from '../../db/models';
+import { AuthError, QueryError, UniquenessError } from '../../helpers/errors';
 import ReqBody from '../../@types/requests';
 import ResBody from '../../@types/responses';
-import { Constants } from '../../helpers/constants';
-import { AuthError, QueryError, UniquenessError } from '../../helpers/errors';
 
 const TOKEN_OPTS = { expiresIn: '24h' };
 const { SECRET_KEY } = process.env;
-const { MIN_LENGTH, PASSWORD_REGEX } = Constants;
 
-/*
+/**
  * GET /auth/users
  */
 export const getUser: RequestHandler<{}, ResBody.Auth> = async (req, res) => {
   try {
-    // check authorization
-    if (!req.userID) throw new AuthError('Please login');
     const user = await User.findOne({ _id: req.userID });
     if (!user) throw new QueryError('Error fetching user. Please login.');
     res.status(200).json({ user });
   } catch (error) {
-    // no credentials
-    if (error instanceof AuthError) {
-      res.status(401).json({ error: error.message });
-
-      // error with db
-    } else if (error instanceof QueryError) {
+    // auth token valid, but userID not associated with a document
+    if (error instanceof QueryError) {
       res.status(500).json({ error: error.message });
-
       // misc
     } else if (error instanceof Error) {
       res.status(500).json({ error: error.message });
@@ -48,17 +38,6 @@ export const register: RequestHandler<
   ReqBody.Register
 > = async (req, res) => {
   try {
-    // validate request body
-    const schema = Joi.object({
-      username: Joi.string().required(),
-      email: Joi.string().email().required(),
-      password: Joi.string().min(MIN_LENGTH).pattern(PASSWORD_REGEX).required(),
-    });
-    const { error } = schema.validate(req.body, {
-      abortEarly: false,
-    });
-    if (error) throw error;
-
     // check username and email uniqueness
     let user;
     user = await User.findOne({ username: req.body.username });
@@ -71,15 +50,9 @@ export const register: RequestHandler<
     const token = jwt.sign({ userID: user.id }, SECRET_KEY!, TOKEN_OPTS);
     res.status(201).json({ token, user });
   } catch (error) {
-    // Joi errors
-    if (error instanceof Joi.ValidationError) {
-      const details = error.details.map((detail) => detail.message);
-      res.status(400).json({ errors: details });
-
-      // username/email already exist
-    } else if (error instanceof UniquenessError) {
+    // username / password exists
+    if (error instanceof UniquenessError) {
       res.status(400).json({ error: error.message });
-
       // misc
     } else if (error instanceof Error) {
       res.status(500).json({ error: error.message });
@@ -87,7 +60,7 @@ export const register: RequestHandler<
   }
 };
 
-/*
+/**
  * POST /auth/login
  */
 export const login: RequestHandler<{}, ResBody.Auth, ReqBody.Login> = async (
@@ -95,21 +68,9 @@ export const login: RequestHandler<{}, ResBody.Auth, ReqBody.Login> = async (
   res
 ) => {
   try {
-    // validate request body
-    const schema = Joi.object({
-      username: Joi.string().required(),
-      password: Joi.string().min(MIN_LENGTH).pattern(PASSWORD_REGEX).required(),
-    });
-    const { error } = schema.validate(req.body, {
-      abortEarly: false,
-    });
-    if (error) throw error;
-
-    // verify username
+    // verify username and password
     const user = await User.findOne({ username: req.body.username });
     if (!user) throw new AuthError('Wrong username and/or password');
-
-    // verify found user password
     const validPass = await bcrypt.compare(req.body.password, user.password);
     if (!validPass) throw new AuthError('Wrong username and/or password');
 
@@ -117,25 +78,19 @@ export const login: RequestHandler<{}, ResBody.Auth, ReqBody.Login> = async (
     const token = jwt.sign({ userID: user.id }, SECRET_KEY!, TOKEN_OPTS);
     res.status(200).json({ token, user });
   } catch (error) {
-    // Joi errors
-    if (error instanceof Joi.ValidationError) {
-      const details = error.details.map((detail) => detail.message);
-      res.status(400).json({ errors: details });
-
-      // bad credentials
-    } else if (error instanceof AuthError) {
+    // bad credentials
+    if (error instanceof AuthError) {
       res.status(401).json({ error: error.message });
-
-      // misc
+      //misc
     } else if (error instanceof Error) {
       res.status(500).json({ error: error.message });
     }
   }
 };
 
-/*
+/**
  * DELETE /auth/logout
  */
-export const logout: RequestHandler = async (req, res) => {
-  req.userID ? res.sendStatus(204) : res.sendStatus(403);
+export const logout: RequestHandler = async (_req, res) => {
+  res.send(204).json('logged out successfully!');
 };
