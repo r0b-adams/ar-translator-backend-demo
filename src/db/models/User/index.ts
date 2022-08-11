@@ -1,9 +1,7 @@
 import bcrypt from 'bcrypt';
 import { model, Model, Schema, Document } from 'mongoose';
 
-import { Constants } from '../../../helpers/constants';
-
-const { SALT_ROUNDS } = Constants;
+import { SALT_ROUNDS } from '../../../helpers/constants';
 
 export interface UserDoc extends Document {
   username: string;
