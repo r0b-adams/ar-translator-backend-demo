@@ -12,7 +12,9 @@ const db = {
       }
       throw new Error('could not connect to db');
     } catch (error) {
-      console.error(error);
+      if (error instanceof Error) {
+        console.log(error.message);
+      }
       return this.disconnect();
     }
   },
@@ -21,7 +23,9 @@ const db = {
     try {
       return await mongoose.disconnect();
     } catch (error) {
-      console.error(error);
+      if (error instanceof Error) {
+        console.log(error.message);
+      }
     } finally {
       console.log(`all db connections disconnected`);
     }
