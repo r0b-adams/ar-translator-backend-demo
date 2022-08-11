@@ -2,11 +2,15 @@ declare namespace ReqBody {
   /*
    * auth requests
    */
-  type Auth = {
-    email?: string;
+  interface Login {
     username: string;
     password: string;
-  };
+    email?: string;
+  }
+
+  interface Register extends Login {
+    email: string;
+  }
 
   /*
    * Translate requests
