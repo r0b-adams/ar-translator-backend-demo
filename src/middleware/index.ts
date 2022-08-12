@@ -3,7 +3,7 @@ import authenticate from './authenticate';
 import authorize from './authorize';
 import validate from './validate';
 import checkUniqueness from './checkUniqueness';
-import errorHandler from './errorhandler';
+import errorHandler from './errorHandler';
 
 export {
   _404,
