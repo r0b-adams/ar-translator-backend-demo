@@ -17,6 +17,8 @@ const checkUniqueness: RequestHandler = async (req, _res, next) => {
 
     user = await User.findOne({ email: req.body.email });
     if (user) throw new UniquenessError('user with that email already exists');
+
+    next();
   } catch (err) {
     next(err);
   }
