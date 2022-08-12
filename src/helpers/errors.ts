@@ -9,9 +9,3 @@ export class UniquenessError extends Error {
     super(message);
   }
 }
-
-export class QueryError extends Error {
-  constructor(message: string) {
-    super(message);
-  }
-}
