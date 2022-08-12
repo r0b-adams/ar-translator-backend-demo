@@ -3,29 +3,25 @@ import { ErrorRequestHandler } from 'express';
 
 import { AuthError, UniquenessError } from '../helpers/errors';
 
-const errorHandler: ErrorRequestHandler = (err, _req, res) => {
-  // unauthorized / unauthenticated
-  if (err instanceof AuthError) {
-    res.status(401).json({ error: err.message });
-    return;
-  }
-
-  // username / password exists (registration)
-  if (err instanceof UniquenessError) {
-    res.status(400).json({ error: err.message });
-    return;
-  }
-
-  // schema doesn't match
+const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   if (err instanceof ValidationError) {
     const details = err.details.map((detail) => detail.message);
     res.status(400).json({ errors: details });
     return;
   }
 
-  // other errors
+  if (err instanceof AuthError) {
+    res.status(401).json({ error: err.message });
+    return;
+  }
+
+  if (err instanceof UniquenessError) {
+    res.status(400).json({ error: err.message });
+    return;
+  }
+
   if (err instanceof Error) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ message: err.message });
     return;
   }
 };
