@@ -58,6 +58,6 @@ export const login: RequestHandler = async (req, res, next) => {
 /**
  * DELETE /auth/logout
  */
-export const logout: RequestHandler = async (_req, res) => {
+export const logout: RequestHandler = (_req, res) => {
   res.send(204).json('logged out successfully!');
 };
