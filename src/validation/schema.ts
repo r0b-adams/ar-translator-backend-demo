@@ -23,13 +23,12 @@ RequestBodySchema[ReqType.POST_LOGIN] = Joi.object({
 });
 
 RequestBodySchema[ReqType.POST_TRANSLATE] = Joi.object({
-  email: Joi.string().email().required(),
-  username: Joi.string().required(),
-  password: Joi.string().min(MIN_LENGTH).pattern(PASSWORD_REGEX).required(),
+  text: Joi.string().required(),
+  from: Joi.string().required().max(2),
+  to: Joi.string().required().max(2),
 });
 
 RequestBodySchema[ReqType.POST_OBJECTS] = Joi.object({
-  email: Joi.string().email().required(),
-  username: Joi.string().required(),
-  password: Joi.string().min(MIN_LENGTH).pattern(PASSWORD_REGEX).required(),
+  img: Joi.string().dataUri(),
+  to: Joi.string().max(2),
 });
