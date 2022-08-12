@@ -1,4 +1,15 @@
+import _404 from './_404';
 import authenticate from './authenticate';
-import catchAll404 from './catchAll404';
+import authorize from './authorize';
+import validate from './validate';
+import checkUniqueness from './checkUniqueness';
+import errorHandler from './errorhandler';
 
-export { authenticate, catchAll404 };
+export {
+  _404,
+  authenticate,
+  authorize,
+  validate,
+  checkUniqueness,
+  errorHandler,
+};
