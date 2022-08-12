@@ -1,15 +1,9 @@
-import { RequestHandler } from 'express';
 import Joi from 'joi';
+import { RequestHandler } from 'express';
 
 import { annotator, translator } from '../../google_APIs/clients';
-import ReqBody from '../../@types/requests';
-import ResBody from '../../@types/responses';
 
-export const localizeAndTranslate: RequestHandler<
-  {},
-  ResBody.Vision,
-  ReqBody.Vision
-> = async (req, res) => {
+export const localizeAndTranslate: RequestHandler = async (req, res, next) => {
   try {
     // grab target language and encoded data
     const { img, to } = req.body; // img arrives as a string of b64 encoded data
@@ -56,9 +50,7 @@ export const localizeAndTranslate: RequestHandler<
     });
 
     res.status(200).json(objsWithTranslations);
-  } catch (error) {
-    if (error instanceof Error) {
-      res.status(500).json({ error: error.message });
-    }
+  } catch (err) {
+    next(err);
   }
 };
