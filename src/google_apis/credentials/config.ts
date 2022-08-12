@@ -34,7 +34,7 @@ const credentials = JSON.stringify({
 
 export const keyFilename = path.join(__dirname, 'data.json');
 
-export const writeCredentials = (): void => {
+const writeCredentials = (): void => {
   try {
     writeFileSync(keyFilename, credentials);
   } catch (error) {
@@ -44,3 +44,5 @@ export const writeCredentials = (): void => {
     }
   }
 };
+
+writeCredentials();

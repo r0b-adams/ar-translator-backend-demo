@@ -1,5 +1,3 @@
-import { writeCredentials, keyFilename } from './config';
-
-writeCredentials();
+import {  keyFilename } from './config';
 
 export default keyFilename;
