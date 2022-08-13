@@ -3,7 +3,12 @@ import express from 'express';
 
 import db from './db';
 import router from './routes';
-import { authenticate, errorHandler, _404 } from './middleware';
+import {
+  authenticate,
+  otherErrorHandler,
+  validationErrorHandler,
+  _404,
+} from './middleware';
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -17,6 +22,7 @@ const FILE_UPLOAD_LIMIT = '100mb';
   app.use(authenticate);
   app.use(router);
   app.use(_404);
-  app.use(errorHandler);
+  app.use(validationErrorHandler);
+  app.use(otherErrorHandler);
   app.listen(PORT, () => console.log(`server listening on ${PORT}`));
 })();
