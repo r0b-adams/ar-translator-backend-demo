@@ -4,8 +4,6 @@ import { RequestHandler } from 'express';
 const { SECRET_KEY } = process.env;
 
 /**
- * intercept the request object before reaching any endpoints
- *
  * if there is a valid token, assign it to req object property
  */
 const authenticate: RequestHandler = (req, _res, next) => {
