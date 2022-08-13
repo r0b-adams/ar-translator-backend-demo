@@ -32,11 +32,13 @@ export const otherErrorHandler: ErrorRequestHandler = (
   res,
   _next
 ) => {
+  // bad credentials
   if (err instanceof AuthError) {
     res.status(401).json({ error: err.message });
     return;
   }
 
+  // username or email already exist in db
   if (err instanceof UniquenessError) {
     res.status(400).json({ error: err.message });
     return;
@@ -44,8 +46,7 @@ export const otherErrorHandler: ErrorRequestHandler = (
 
   // catch all
   if (err instanceof Error) {
-    console.log(err.name);
-    console.log(err.stack);
+    console.log(err);
     res.status(500).json({ message: err.message });
     return;
   }
