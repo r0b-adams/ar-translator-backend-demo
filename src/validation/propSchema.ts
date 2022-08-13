@@ -2,6 +2,10 @@ import Joi from 'joi';
 
 import { MIN_LENGTH, PASSWORD_REGEX } from '../helpers/constants';
 
+/**
+ * definitions for individual properties
+ */
+
 export const basicRequireStr = Joi.string().required().messages({
   'string.empty': `{#label} is required`,
 });
