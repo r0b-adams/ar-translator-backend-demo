@@ -1,15 +1,7 @@
-import bcrypt from 'bcrypt';
-import { model, Model, Schema, Document } from 'mongoose';
+import { model, Model, Schema } from 'mongoose';
 
-import { SALT_ROUNDS } from '../../../helpers/constants';
-
-export interface UserDoc extends Document {
-  username: string;
-  password: string;
-  email: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { UserDoc } from './interface';
+import { hashPassword, validatePassword, validateUser } from './middleware';
 
 const userSchema = new Schema<UserDoc>(
   {
@@ -26,14 +18,13 @@ const userSchema = new Schema<UserDoc>(
       trim: true,
     },
   },
-  // options
   { timestamps: true }
 );
 
-userSchema.pre<UserDoc>('save', async function () {
-  if (this.isNew) this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
-});
+userSchema.pre<UserDoc>('save', validatePassword);
+userSchema.pre<UserDoc>('save', hashPassword);
+userSchema.pre<UserDoc>('save', validateUser);
 
 const User: Model<UserDoc> = model('User', userSchema);
 
-export default User;
+export { User, UserDoc };
