@@ -1,7 +1,6 @@
 import { RequestHandler } from 'express';
-import { ValidationError } from 'Joi';
 
-import RequestBodySchema from '../validation';
+import reqbodySchema from '../validation/reqbodySchema';
 
 /**
  * verify shape of request body
@@ -10,19 +9,13 @@ const validate: RequestHandler = (req, _res, next) => {
   try {
     const { method, originalUrl, body } = req;
 
-    // lookup schema by method and endpoint
+    // lookup schema by method and path
     // (e.g. POST/auth/register)
-    const reqTypeKey = method + originalUrl;
-    const schema = RequestBodySchema[reqTypeKey];
-
-    const { error } = schema.validate(body, {
+    const type = method + originalUrl;
+    const { error } = reqbodySchema(type).validate(body, {
       abortEarly: false, // collect all errors
     });
-
-    // coerce error to a ValidationError instance
-    if (error) {
-      throw new ValidationError(error.message, error.details, error._original);
-    }
+    if (error) throw error;
 
     next();
   } catch (err) {
