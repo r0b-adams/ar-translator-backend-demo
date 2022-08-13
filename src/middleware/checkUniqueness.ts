@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import { Types } from 'mongoose';
 
-import { User, UserDoc } from '../db/models';
+import { User, UserDoc } from '../db/models/User';
 import { UniquenessError } from '../helpers/errors';
 
 const checkUniqueness: RequestHandler = async (req, _res, next) => {
