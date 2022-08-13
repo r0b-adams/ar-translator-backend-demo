@@ -12,6 +12,7 @@ export const validationErrorHandler: ErrorRequestHandler = (
   // Joi errors returning correct properites, but are being
   // thrown as the basic Error instance instead of ValidationError
   // check for both just in case
+  // if not Joi err, handoff to next handler
   const isJoiError =
     err.name === 'ValidationError' &&
     'details' in err &&
@@ -22,7 +23,7 @@ export const validationErrorHandler: ErrorRequestHandler = (
     const errors = details.map((detail) => detail.message);
     res.status(400).json({ errors });
   } else {
-    next();
+    next(err);
   }
 };
 
