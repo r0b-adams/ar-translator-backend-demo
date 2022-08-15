@@ -1,16 +1,12 @@
 import { Schema } from 'mongoose';
 
-import { CredentialsDoc } from './interfaces';
-import {
-  checkPasswordChanged,
-  validatePassword,
-  hashPassword,
-} from './middleware';
+import { CredsDoc } from './types';
+import { validatePassword, hashPassword } from './middleware';
 
 /**
- *
+ * schema for Credentials subdocuments
  */
-const credentials = new Schema<CredentialsDoc>(
+const credentialsSchema = new Schema<CredsDoc>(
   {
     password: {
       type: String,
@@ -18,14 +14,13 @@ const credentials = new Schema<CredentialsDoc>(
       required: [true, 'password is required'],
     },
   },
-
   {
     _id: false,
     id: false,
   }
 );
-credentials.pre('save', checkPasswordChanged);
-credentials.pre('save', validatePassword);
-credentials.pre('save', hashPassword);
 
-export default credentials;
+credentialsSchema.pre('save', validatePassword);
+credentialsSchema.pre('save', hashPassword);
+
+export default credentialsSchema;
