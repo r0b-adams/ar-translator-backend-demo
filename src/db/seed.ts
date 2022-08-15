@@ -3,36 +3,41 @@ import { User } from './models';
 
 const data = [
   {
-    username: 'spongebob',
-    password: 'imreadyimready',
-    email: 'spongebob@squarepants.com',
+    profile: {
+      username: 'spongebob',
+      email: 'spongebob@squarepants.com',
+    },
+    credentials: {
+      password: 'imreadyimreadyA1!',
+    },
   },
   {
-    username: 'patrick',
-    password: 'weewooweewoo',
-    email: 'patrick@star.com',
+    profile: {
+      username: 'patrick',
+      email: 'patrick@star.com',
+    },
+    credentials: {
+      password: 'weewooweewooA1!',
+    },
   },
   {
-    username: 'squidward',
-    password: 'everybodysacritic',
-    email: 'squidward@tentacles.com',
+    profile: {
+      username: 'squidward',
+      email: 'squidward@tentacles.com',
+    },
+    credentials: {
+      password: 'everybodysacriticA1!',
+    },
   },
 ];
-
-const addData = async (): Promise<void> => {
-  try {
-    await User.create(data);
-  } catch (error) {
-    console.error(error);
-  }
-};
 
 const seed = async (): Promise<void> => {
   try {
     const connection = await db.connect();
     if (connection) {
+      console.log('dropping database and seeding...');
       await connection.dropDatabase();
-      await addData();
+      await User.create(data);
     }
     console.log('db seeded successfully! :)');
   } catch (error) {
