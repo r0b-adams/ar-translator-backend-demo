@@ -13,10 +13,11 @@ const { SECRET_KEY } = process.env;
  */
 export const getUser: RequestHandler = async (req, res, next) => {
   try {
-    const user = await User.findOne({ _id: req.userID });
+    const user = await User.findById(req.userID);
 
-    // had a valid token but decoded ID not associated with an existing user
-    if (!user) throw new Error('Error fetching user. Please login.');
+    // valid token found but decoded ID not associated with an existing user
+    // possible if client retains token locally after Doc deletion
+    if (!user) throw new AuthError('Error fetching user. Please login.');
 
     res.status(200).json({ user });
   } catch (err) {
@@ -29,8 +30,20 @@ export const getUser: RequestHandler = async (req, res, next) => {
  */
 export const register: RequestHandler = async (req, res, next) => {
   try {
-    const user = await User.create(req.body);
+    const { username, email, password } = req.body;
+
+    const user = await User.create({
+      profile: {
+        username,
+        email,
+      },
+      credentials: {
+        password,
+      },
+    });
+
     const token = jwt.sign({ userID: user.id }, SECRET_KEY!, TOKEN_OPTS);
+
     res.status(201).json({ token, user });
   } catch (err) {
     next(err);
@@ -42,13 +55,16 @@ export const register: RequestHandler = async (req, res, next) => {
  */
 export const login: RequestHandler = async (req, res, next) => {
   try {
-    const user = await User.findOne({ username: req.body.username });
+    const { username, password } = req.body;
+
+    const user = await User.findOne({ 'profile.username': username });
     if (!user) throw new AuthError('Wrong username and/or password');
 
-    const validPass = await bcrypt.compare(req.body.password, user.password);
+    const validPass = await bcrypt.compare(password, user.credentials.password);
     if (!validPass) throw new AuthError('Wrong username and/or password');
 
     const token = jwt.sign({ userID: user.id }, SECRET_KEY!, TOKEN_OPTS);
+
     res.status(200).json({ token, user });
   } catch (err) {
     next(err);
@@ -59,5 +75,5 @@ export const login: RequestHandler = async (req, res, next) => {
  * DELETE /auth/logout
  */
 export const logout: RequestHandler = (_req, res) => {
-  res.send(204).json('logged out successfully!');
+  res.send(204).json({ message: 'logged out successfully!' });
 };
