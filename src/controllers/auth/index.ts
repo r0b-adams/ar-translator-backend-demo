@@ -19,7 +19,7 @@ export const getUser: RequestHandler = async (req, res, next) => {
     // possible if client retains token locally after Doc deletion
     if (!user) throw new AuthError('Error fetching user. Please login.');
 
-    res.status(200).json({ user });
+    res.status(200).json({ profile: user.profile });
   } catch (err) {
     next(err);
   }
@@ -44,7 +44,7 @@ export const register: RequestHandler = async (req, res, next) => {
 
     const token = jwt.sign({ userID: user.id }, SECRET_KEY!, TOKEN_OPTS);
 
-    res.status(201).json({ token, user });
+    res.status(201).json({ token, profile: user.profile });
   } catch (err) {
     next(err);
   }
@@ -57,15 +57,18 @@ export const login: RequestHandler = async (req, res, next) => {
   try {
     const { username, password } = req.body;
 
-    const user = await User.findOne({ 'profile.username': username });
+    const user = await User.findByUsername(username);
     if (!user) throw new AuthError('Wrong username and/or password');
 
-    const validPass = await bcrypt.compare(password, user.credentials.password);
-    if (!validPass) throw new AuthError('Wrong username and/or password');
+    const validPassword = await bcrypt.compare(
+      password,
+      user.credentials.password
+    );
+    if (!validPassword) throw new AuthError('Wrong username and/or password');
 
     const token = jwt.sign({ userID: user.id }, SECRET_KEY!, TOKEN_OPTS);
 
-    res.status(200).json({ token, user });
+    res.status(200).json({ token, profile: user.profile });
   } catch (err) {
     next(err);
   }
@@ -74,6 +77,7 @@ export const login: RequestHandler = async (req, res, next) => {
 /**
  * DELETE /auth/logout
  */
-export const logout: RequestHandler = (_req, res) => {
+export const logout: RequestHandler = (req, res) => {
+  delete req.userID;
   res.send(204).json({ message: 'logged out successfully!' });
 };
