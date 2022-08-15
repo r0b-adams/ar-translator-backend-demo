@@ -1,16 +1,16 @@
-import _404 from './_404';
 import authenticate from './authenticate';
 import authorize from './authorize';
-import validate from './validate';
+import validateReqBody from './validateReqBody';
 import checkUniqueness from './checkUniqueness';
+import respond404 from './respond404';
 import { validationErrorHandler, otherErrorHandler } from './errorHandlers';
 
 export {
-  _404,
   authenticate,
   authorize,
-  validate,
+  validateReqBody,
   checkUniqueness,
   validationErrorHandler,
   otherErrorHandler,
+  respond404,
 };
