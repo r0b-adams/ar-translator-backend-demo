@@ -1,30 +1,14 @@
-import { model, Model, Schema } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
-import { UserDoc } from './interface';
-import { hashPassword, validatePassword, validateUser } from './middleware';
+import profile from './_profile';
+import credentials from './_credentials';
+import { UserDoc, UserModel } from './interfaces';
 
-const userSchema = new Schema<UserDoc>(
-  {
-    username: {
-      type: String,
-      trim: true,
-    },
-    email: {
-      type: String,
-      trim: true,
-    },
-    password: {
-      type: String,
-      trim: true,
-    },
-  },
-  { timestamps: true }
-);
+const userSchema = new Schema<UserDoc, UserModel>({
+  profile,
+  credentials,
+});
 
-userSchema.pre<UserDoc>('save', validatePassword);
-userSchema.pre<UserDoc>('save', hashPassword);
-userSchema.pre<UserDoc>('save', validateUser);
+const User = model<UserDoc, UserModel>('user', userSchema);
 
-const User: Model<UserDoc> = model('User', userSchema);
-
-export { User, UserDoc };
+export default User;
