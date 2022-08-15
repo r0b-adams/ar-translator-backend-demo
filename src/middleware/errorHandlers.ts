@@ -3,6 +3,10 @@ import { ErrorRequestHandler } from 'express';
 
 import { AuthError, UniquenessError } from '../helpers/errors';
 
+/**
+ * Joi validation can return err array of multiple failed checks
+ * catch and return list of the err messages
+ */
 export const validationErrorHandler: ErrorRequestHandler = (
   err,
   _req,
