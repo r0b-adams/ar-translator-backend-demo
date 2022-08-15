@@ -1,17 +1,8 @@
 import Joi from 'joi';
 
-import {
-  username,
-  email,
-  password,
-  from,
-  to,
-  img,
-  text,
-  basicRequireStr,
-} from './propSchema';
+import { username, email, password, from, to, img, text } from './_propSchema';
 
-enum ReqType {
+export enum ReqType {
   POST_REGISTER = 'POST/auth/register',
   POST_LOGIN = 'POST/auth/login',
   POST_TRANSLATE = 'POST/translateAPI/translate',
@@ -26,8 +17,9 @@ const schema = {
   }),
   POST_LOGIN: Joi.object({
     username,
-    // just check for truthiness on a login request
-    password: basicRequireStr.label('password'),
+    password: Joi.string() // just check for truthiness on a login request
+      .required()
+      .messages({ 'string.empty': 'password is required' }),
   }),
   POST_TRANSLATE: Joi.object({
     text,
