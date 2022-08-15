@@ -7,7 +7,7 @@ import {
   authenticate,
   otherErrorHandler,
   validationErrorHandler,
-  _404,
+  respond404,
 } from './middleware';
 
 const PORT = process.env.PORT || 3000;
@@ -21,7 +21,7 @@ const FILE_UPLOAD_LIMIT = '100mb';
   app.use(express.urlencoded({ limit: FILE_UPLOAD_LIMIT, extended: false }));
   app.use(authenticate);
   app.use(router);
-  app.use(_404);
+  app.use(respond404);
   app.use(validationErrorHandler);
   app.use(otherErrorHandler);
   app.listen(PORT, () => console.log(`server listening on ${PORT}`));
