@@ -9,10 +9,9 @@ export const validationErrorHandler: ErrorRequestHandler = (
   res,
   next
 ) => {
-  // Joi errors returning correct properites, but are being
-  // thrown as the basic Error instance instead of ValidationError
+  // Joi errors include correct properites, but are being
+  // thrown as a basic Error instance instead of ValidationError
   // check for both just in case
-  // if not Joi err, handoff to next handler
   const isJoiError =
     err.name === 'ValidationError' &&
     'details' in err &&
@@ -48,7 +47,7 @@ export const otherErrorHandler: ErrorRequestHandler = (
   // catch all
   if (err instanceof Error) {
     console.log(err);
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ error: 'internal server error' });
     return;
   }
 };
