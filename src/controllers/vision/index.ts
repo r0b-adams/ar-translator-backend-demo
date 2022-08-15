@@ -2,6 +2,7 @@ import Joi from 'joi';
 import { RequestHandler } from 'express';
 
 import { annotator, translator } from '../../google_APIs/clients';
+import { LANGCODE_ENGLISH } from '../../helpers/constants';
 
 export const localizeAndTranslate: RequestHandler = async (req, res, next) => {
   try {
@@ -26,7 +27,7 @@ export const localizeAndTranslate: RequestHandler = async (req, res, next) => {
 
     // Google Vision only returns English results
     // if that is the target, just return data
-    if (to === 'en') {
+    if (to === LANGCODE_ENGLISH) {
       res.status(200).json(objects);
       return;
     }
@@ -34,7 +35,7 @@ export const localizeAndTranslate: RequestHandler = async (req, res, next) => {
     // query Google Translate API once with array of obj descriptions
     const objNames = objects.map((obj) => obj.name!);
     const [translations] = await translator.translate(objNames, {
-      from: 'en',
+      from: LANGCODE_ENGLISH,
       to,
     });
 
