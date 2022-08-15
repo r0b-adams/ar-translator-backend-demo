@@ -1,66 +1,33 @@
 import bcrypt from 'bcrypt';
-import { PreSaveMiddlewareFunction } from 'mongoose';
+import { PreSaveMiddlewareFunction, Document } from 'mongoose';
 
 import userSchema, { Path } from '../../../validation/userSchema';
-import { CredentialsDoc, ProfileDoc } from './interfaces';
+import { CredsDoc, ProfileDoc } from './types';
 import { SALT_ROUNDS } from '../../../helpers/constants';
 
-// Profile Subdoc middleware
-// fires when save() called on User parent doc
+// Profile subdoc presave middleware
 
-/**
- *
- */
-export const validateProfile: PreSaveMiddlewareFunction<ProfileDoc> = function (
-  next
-) {
-  const profile = this.toObject();
-
-  const { error } = userSchema(Path.PROFILE).validate(profile, {
-    presence: 'required',
-    abortEarly: false,
-  });
-  if (error) throw error;
-  next();
-};
-
-// Credentials Subdoc middleware
-// fires when save() called on User parent doc
-
-/**
- * Set locals object property if password was changed
- */
-export const checkPasswordChanged: PreSaveMiddlewareFunction<CredentialsDoc> =
-  function () {
-    if (this.modifiedPaths().includes(Path.PASSWORD)) {
-      this.$locals.passwordChanged = true;
-    }
-  };
-
-/**
- * if password was changed, validate before hashing
- */
-export const validatePassword: PreSaveMiddlewareFunction<CredentialsDoc> =
-  function (next) {
-    const { passwordChanged } = this.$locals;
-
-    if (passwordChanged) {
-      const { error } = userSchema(Path.PASSWORD).validate(this.password, {
-        abortEarly: false,
-      });
-      if (error) throw error;
-    }
-    next();
-  };
-
-/**
- * hash password
- */
-export const hashPassword: PreSaveMiddlewareFunction<CredentialsDoc> =
+export const validateProfile: PreSaveMiddlewareFunction<ProfileDoc & Document> =
   async function () {
-    const { passwordChanged } = this.$locals;
+    const profile = this.toObject();
+    await userSchema(Path.PROFILE).validateAsync(profile, {
+      presence: 'required',
+      abortEarly: false,
+    });
+  };
 
-    if (passwordChanged) {
+// Credentials subdoc presave middleware
+
+export const validatePassword: PreSaveMiddlewareFunction<CredsDoc & Document> =
+  async function () {
+    if (this.isModified(Path.PASSWORD)) {
+      await userSchema(Path.PASSWORD).validateAsync(this.password);
+    }
+  };
+
+export const hashPassword: PreSaveMiddlewareFunction<CredsDoc & Document> =
+  async function () {
+    if (this.isModified(Path.PASSWORD)) {
       this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
     }
   };
