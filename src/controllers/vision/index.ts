@@ -10,8 +10,7 @@ export const localizeAndTranslate: RequestHandler = async (req, res, next) => {
     const [, b64encodedImage] = img.split(','); // ignore the MIME type and grab the b64 substr
 
     // validate encoded img data
-    const { error } = Joi.string().base64().validate(b64encodedImage);
-    if (error) throw error;
+    await Joi.string().base64().validateAsync(b64encodedImage);
 
     // query Google Vision API
     const [result] = await annotator.objectLocalization!({
