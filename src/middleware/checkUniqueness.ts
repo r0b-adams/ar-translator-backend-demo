@@ -1,22 +1,21 @@
 import { RequestHandler } from 'express';
-import { Types } from 'mongoose';
 
-import { User, UserDoc } from '../db/models/User';
+import User from '../db/models/User';
 import { UniquenessError } from '../helpers/errors';
 
 const checkUniqueness: RequestHandler = async (req, _res, next) => {
   try {
-    let user:
-      | (UserDoc & {
-          _id: Types.ObjectId;
-        })
-      | null;
+    const { username, email } = req.body;
 
-    user = await User.findOne({ username: req.body.username });
-    if (user) throw new UniquenessError('that username already exists');
+    const user_un = await User.findOne({ 'profile.username': username });
+    if (user_un) {
+      throw new UniquenessError('an account with that username already exists');
+    }
 
-    user = await User.findOne({ email: req.body.email });
-    if (user) throw new UniquenessError('user with that email already exists');
+    const user_em = await User.findOne({ 'profile.email': email });
+    if (user_em) {
+      throw new UniquenessError('an account with that email already exists');
+    }
 
     next();
   } catch (err) {
