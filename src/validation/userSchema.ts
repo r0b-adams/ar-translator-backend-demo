@@ -17,7 +17,7 @@ const schema = {
   PASSWORD: password,
 };
 
-const userModelSchema = (type: string): UserSchemaTypes => {
+const userSchema = (type: string): UserSchemaTypes => {
   switch (type) {
     case Path.PROFILE:
       return schema.PROFILE;
@@ -30,4 +30,4 @@ const userModelSchema = (type: string): UserSchemaTypes => {
   }
 };
 
-export default userModelSchema;
+export default userSchema;
