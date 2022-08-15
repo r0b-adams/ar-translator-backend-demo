@@ -26,6 +26,7 @@ const schema = {
   }),
   POST_LOGIN: Joi.object({
     username,
+    // just check for truthiness on a login request
     password: basicRequireStr.label('password'),
   }),
   POST_TRANSLATE: Joi.object({
