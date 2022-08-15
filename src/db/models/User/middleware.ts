@@ -1,46 +1,66 @@
 import bcrypt from 'bcrypt';
 import { PreSaveMiddlewareFunction } from 'mongoose';
 
-import { UserDoc } from './interface';
-import UserModelSchema, { Path } from '../../../validation/userSchema';
+import userSchema, { Path } from '../../../validation/userSchema';
+import { CredentialsDoc, ProfileDoc } from './interfaces';
 import { SALT_ROUNDS } from '../../../helpers/constants';
 
-export const validatePassword: PreSaveMiddlewareFunction<UserDoc> = function (
+// Profile Subdoc middleware
+// fires when save() called on User parent doc
+
+/**
+ *
+ */
+export const validateProfile: PreSaveMiddlewareFunction<ProfileDoc> = function (
   next
 ) {
-  const { $set: changes } = this.getChanges();
+  const profile = this.toObject();
 
-  if (changes && Path.PASSWORD in changes) {
-    const { error } = UserModelSchema(Path.PASSWORD).validate(this.password, {
-      abortEarly: false,
-    });
-    if (error) throw error;
-  }
-
+  const { error } = userSchema(Path.PROFILE).validate(profile, {
+    presence: 'required',
+    abortEarly: false,
+  });
+  if (error) throw error;
   next();
 };
 
-export const hashPassword: PreSaveMiddlewareFunction<UserDoc> =
-  async function () {
-    const { $set: changes } = this.getChanges();
+// Credentials Subdoc middleware
+// fires when save() called on User parent doc
 
-    if (changes && Path.PASSWORD in changes) {
-      this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
+/**
+ * Set locals object property if password was changed
+ */
+export const checkPasswordChanged: PreSaveMiddlewareFunction<CredentialsDoc> =
+  function () {
+    if (this.modifiedPaths().includes(Path.PASSWORD)) {
+      this.$locals.passwordChanged = true;
     }
   };
 
-export const validateUser: PreSaveMiddlewareFunction<UserDoc> = function (
-  next
-) {
-  const user = {
-    username: this.username,
-    email: this.email,
+/**
+ * if password was changed, validate before hashing
+ */
+export const validatePassword: PreSaveMiddlewareFunction<CredentialsDoc> =
+  function (next) {
+    const { passwordChanged } = this.$locals;
+
+    if (passwordChanged) {
+      const { error } = userSchema(Path.PASSWORD).validate(this.password, {
+        abortEarly: false,
+      });
+      if (error) throw error;
+    }
+    next();
   };
 
-  const { error } = UserModelSchema(Path.PROFILE).validate(user, {
-    abortEarly: false, // collect all errors
-  });
-  if (error) throw error;
+/**
+ * hash password
+ */
+export const hashPassword: PreSaveMiddlewareFunction<CredentialsDoc> =
+  async function () {
+    const { passwordChanged } = this.$locals;
 
-  next();
-};
+    if (passwordChanged) {
+      this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
+    }
+  };
