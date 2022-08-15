@@ -1,12 +1,12 @@
 import { Schema } from 'mongoose';
 
-import { ProfileDoc } from './interfaces';
+import { ProfileDoc } from './types';
 import { validateProfile } from './middleware';
 
 /**
- *
+ * schema for Profile subdocuments
  */
-const profile = new Schema<ProfileDoc>(
+const profileSchema = new Schema<ProfileDoc>(
   {
     username: {
       type: String,
@@ -27,6 +27,6 @@ const profile = new Schema<ProfileDoc>(
   }
 );
 
-profile.pre('save', validateProfile);
+profileSchema.pre('save', validateProfile);
 
-export default profile;
+export default profileSchema;
