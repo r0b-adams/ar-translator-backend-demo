@@ -6,11 +6,9 @@ import { MIN_LENGTH, PASSWORD_REGEX } from '../helpers/constants';
  * definitions for individual properties
  */
 
-export const basicRequireStr = Joi.string().required().messages({
-  'string.empty': `{#label} is required`,
+export const username = Joi.string().required().messages({
+  'string.empty': `username is required`,
 });
-
-export const username = basicRequireStr.label('username');
 
 export const email = Joi.string().required().email().messages({
   'string.empty': `email is required`,
@@ -27,24 +25,26 @@ export const password = Joi.string()
     'string.pattern.base': `password must contain a digit, an uppercase character, a lowercase character, and at least one special character: ! @ # $ % ^ & *`,
   });
 
-export const img = Joi.string()
-  .label('image data')
-  .required()
-  .dataUri()
-  .messages({
-    'string.empty': `image data required`,
-    'string.dataUri': 'valid data URI required',
-  });
+export const img = Joi.string().required().dataUri().messages({
+  'string.empty': `image data required`,
+  'string.dataUri': 'valid data URI required',
+});
 
 export const languageCode = Joi.string().required().max(2).messages({
-  'string.empty': `{#label} is required`,
   'string.max': 'valid language code required',
 });
 
-export const text = basicRequireStr.label('text');
+export const text = Joi.string()
+  .required()
+  .messages({ 'string.empty': 'no text to translate' });
 
-export const from = languageCode.label('source language');
-export const to = languageCode.label('target language');
+export const from = languageCode.messages({
+  'string.empty': 'source language is required',
+});
+
+export const to = languageCode.messages({
+  'string.empty': 'target language is required',
+});
 
 export const b64 = Joi.string().required().base64().messages({
   'string.empty': `data not found`,
