@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-import { email, password, username } from './propSchema';
+import { email, password, username } from './_propSchema';
 
 type UserSchemaTypes = Joi.StringSchema | Joi.ObjectSchema<any>;
 
