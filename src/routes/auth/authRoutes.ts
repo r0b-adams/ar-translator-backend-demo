@@ -1,17 +1,17 @@
+import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { RequestHandler } from 'express';
 
-import { AuthError } from '../../helpers/errors';
 import { User } from '../../db/models';
+import { authorize, validateReqBody, checkUniqueness } from '../../middleware';
+import { AuthError } from '../../helpers/errors';
 
 const TOKEN_OPTS = { expiresIn: '24h' };
 const { SECRET_KEY } = process.env;
 
-/**
- * GET /auth/users
- */
-export const getUser: RequestHandler = async (req, res, next) => {
+const router = Router();
+
+router.get('/users', authorize, async (req, res, next) => {
   try {
     const user = await User.findById(req.userID);
 
@@ -23,37 +23,36 @@ export const getUser: RequestHandler = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-};
+});
 
-/**
- * POST /auth/register
- */
-export const register: RequestHandler = async (req, res, next) => {
-  try {
-    const { username, email, password } = req.body;
+router.post(
+  '/register',
+  validateReqBody,
+  checkUniqueness,
+  async (req, res, next) => {
+    try {
+      const { username, email, password } = req.body;
 
-    const user = await User.create({
-      profile: {
-        username,
-        email,
-      },
-      credentials: {
-        password,
-      },
-    });
+      const user = await User.create({
+        profile: {
+          username,
+          email,
+        },
+        credentials: {
+          password,
+        },
+      });
 
-    const token = jwt.sign({ userID: user.id }, SECRET_KEY!, TOKEN_OPTS);
+      const token = jwt.sign({ userID: user.id }, SECRET_KEY!, TOKEN_OPTS);
 
-    res.status(201).json({ token, profile: user.profile });
-  } catch (err) {
-    next(err);
+      res.status(201).json({ token, profile: user.profile });
+    } catch (err) {
+      next(err);
+    }
   }
-};
+);
 
-/**
- * POST /auth/login
- */
-export const login: RequestHandler = async (req, res, next) => {
+router.post('/login', validateReqBody, async (req, res, next) => {
   try {
     const { username, password } = req.body;
 
@@ -72,12 +71,10 @@ export const login: RequestHandler = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-};
+});
 
-/**
- * DELETE /auth/logout
- */
-export const logout: RequestHandler = (req, res) => {
-  delete req.userID;
+router.delete('/logout', authorize, (_req, res) => {
   res.send(204).json({ message: 'logged out successfully!' });
-};
+});
+
+export default router;

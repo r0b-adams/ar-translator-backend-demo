@@ -1,10 +1,13 @@
+import { Router } from 'express';
 import Joi from 'joi';
-import { RequestHandler } from 'express';
 
 import { annotator, translator } from '../../google_APIs/clients';
+import { authorize, validateReqBody } from '../../middleware';
 import { LANGCODE_ENGLISH } from '../../helpers/constants';
 
-export const localizeAndTranslate: RequestHandler = async (req, res, next) => {
+const router = Router();
+
+router.post('/objects', authorize, validateReqBody, async (req, res, next) => {
   try {
     // grab target language and encoded data
     const { img, to } = req.body; // img arrives as a string of b64 encoded data
@@ -53,4 +56,6 @@ export const localizeAndTranslate: RequestHandler = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-};
+});
+
+export default router;
