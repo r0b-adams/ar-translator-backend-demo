@@ -25,7 +25,7 @@ type UserQuery = Promise<
 >;
 
 export interface UserModel extends Model<UserDoc> {
-  _byProfProp(property: string, value: string): UserQuery;
+  _findByProfileProperty(property: string, value: string): UserQuery;
   findByUsername(value: string): UserQuery;
   findByEmail(value: string): UserQuery;
 }

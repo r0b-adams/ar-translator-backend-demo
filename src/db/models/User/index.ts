@@ -12,18 +12,20 @@ const userSchema = new Schema<UserDoc, UserModel>({
 // Model lvl static methods
 
 userSchema.static('findByEmail', async function findByEmail(value: string) {
-  return this._byProfProp('email', value);
-});
-
-userSchema.static('findByUsername', async function findByUsername(value: string) {
-  return this._byProfProp('username', value);
+  return this._findByProfileProperty('email', value);
 });
 
 userSchema.static(
-  '_byProfProp',
+  'findByUsername',
+  async function findByUsername(value: string) {
+    return this._findByProfileProperty('username', value);
+  }
+);
 
-  // helper to create queries by profile subdoc property names
-  async function _byProfProp(property: string, value: string) {
+userSchema.static(
+  '_findByProfileProperty',
+  // helper to create queries by profile subdocument property names
+  async function _findByProfileProperty(property: string, value: string) {
     const conditions: { [key: string]: string } = {};
     conditions[`profile.${property}`] = value;
     return this.findOne(conditions);
