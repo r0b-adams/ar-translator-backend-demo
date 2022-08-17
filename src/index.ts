@@ -9,11 +9,10 @@ import {
   validationErrorHandler,
   respond404,
 } from './middleware';
+import { FILE_UPLOAD_LIMIT } from './helpers/constants';
 
 const PORT = process.env.PORT || 3000;
 const app = express();
-
-const FILE_UPLOAD_LIMIT = '100mb';
 
 (async () => {
   await db.connect();
