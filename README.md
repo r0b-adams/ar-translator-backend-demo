@@ -112,7 +112,7 @@ Log out of an existing user account.
 
 - _[Requires authorization](#tokens)_
 
-Request Body schema:: _n/a_
+Request Body schema: _n/a_
 
 JSON Response schema:
 
