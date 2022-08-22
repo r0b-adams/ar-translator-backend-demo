@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import Joi from 'joi';
 
-import { annotator, translator } from '../../google_APIs/clients';
+import { annotator, translator } from '../../google_apis/clients';
 import { authorize, validateReqBody } from '../../middleware';
 import { LANGCODE_ENGLISH } from '../../helpers/constants';
 

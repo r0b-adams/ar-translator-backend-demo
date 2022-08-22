@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { translator } from '../../google_APIs/clients';
+import { translator } from '../../google_apis/clients';
 import { authorize, validateReqBody } from '../../middleware';
 
 const router = Router();
