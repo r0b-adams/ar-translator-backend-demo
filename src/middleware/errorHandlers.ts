@@ -1,4 +1,4 @@
-import { ValidationError } from 'Joi';
+import { ValidationError } from 'joi';
 import { ErrorRequestHandler } from 'express';
 
 import { AuthError, UniquenessError } from '../helpers/errors';
