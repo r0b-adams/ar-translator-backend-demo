@@ -1,6 +1,5 @@
 import { RequestHandler } from 'express';
-
-import reqBodySchema from '../validation/reqBodySchema';
+import { reqBodySchema } from '../validation';
 
 /**
  * verify shape of request body
