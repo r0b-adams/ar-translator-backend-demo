@@ -167,6 +167,8 @@ JSON Response schema:
 
 #### **POST /translateAPI/translate**
 
+Translate text from a source language to a target language.
+
 - _[Requires authorization](#tokens)_
 
 **Request Body schema:**
@@ -203,6 +205,8 @@ JSON Response schema:
 
 #### **POST /visionAPI/objects**
 
+Returns a list of recognized objects in an image.
+
 - _[Requires authorization](#tokens)_
 
 Request Body schema:
@@ -225,7 +229,10 @@ JSON Response:
     {
       boundingPoly: {
         normalizedVertices: [
-          {x1, y1}, {x2, y2}, {x3, y3}, {x4, y4},
+          {x1, y1},
+          {x2, y2},
+          {x3, y3},
+          {x4, y4},
         ]
       },
       mid,,
