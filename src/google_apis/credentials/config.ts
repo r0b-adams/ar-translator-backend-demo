@@ -37,8 +37,11 @@ export const keyFilename = path.join(__dirname, 'data.json');
 const writeCredentials = (): void => {
   try {
     writeFileSync(keyFilename, credentials);
+    console.log('success writing credentials :)');
+    console.log(credentials);
   } catch (error) {
     if (error instanceof Error) {
+      console.log('error writing credentials :(');
       console.log(error.message);
       if (existsSync(keyFilename)) unlinkSync(keyFilename);
     }

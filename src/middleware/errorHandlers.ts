@@ -51,7 +51,9 @@ export const otherErrorHandler: ErrorRequestHandler = (
   // catch all
   if (err instanceof Error) {
     console.log(err);
-    res.status(500).json({ error: 'internal server error' });
+    res
+      .status(500)
+      .json({ error: 'internal server error', message: error.message });
     return;
   }
 };
