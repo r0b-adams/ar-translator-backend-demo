@@ -53,7 +53,7 @@ export const otherErrorHandler: ErrorRequestHandler = (
     console.log(err);
     res
       .status(500)
-      .json({ error: 'internal server error', message: error.message });
+      .json({ error: 'internal server error', message: err.message });
     return;
   }
 };
