@@ -2,12 +2,26 @@
 
 ## Table of Contents
 
+- [Installation](#installation)
+- [Usage](#usage)
 - [Authorization endpoints](#authorization)
 - [Translation endpoints](#translation)
 - [Vision endpoints](#vision)
 - [JWT authorization](#tokens)
 
 ---
+
+## Installation
+
+```
+npm install
+```
+
+## Usage
+
+```
+npm start
+```
 
 ## Authorization
 
