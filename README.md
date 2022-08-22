@@ -149,7 +149,7 @@ JSON Response schema:
 | property | description                                                                                  |
 | -------: | -------------------------------------------------------------------------------------------- |
 |     code | language code conforming to [ISO-639-1](https://en.wikipedia.org/wiki/ISO_639-1) identifiers |
-|     name | The English exonym for the language                                                          |
+|     name | the English exonym for the language                                                          |
 
 #### **POST /translateAPI/translate**
 
@@ -167,7 +167,7 @@ JSON Response schema:
 
 | property | description                                                                                                   |
 | -------: | ------------------------------------------------------------------------------------------------------------- |
-|     text | Text to be translated from source language to target language                                                 |
+|     text | text to be translated from source language to target language                                                 |
 |     from | source language: language code conforming to [ISO-639-1](https://en.wikipedia.org/wiki/ISO_639-1) identifiers |
 |       to | target language: language code conforming to [ISO-639-1](https://en.wikipedia.org/wiki/ISO_639-1) identifiers |
 
