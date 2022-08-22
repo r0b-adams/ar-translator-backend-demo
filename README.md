@@ -23,10 +23,10 @@ JSON Response schema:
 
 ```
 {
-	profile: {
-		username,
-		email
-	}
+  profile: {
+    username,
+    email
+  }
 }
 ```
 
@@ -42,9 +42,9 @@ Request Body schema:
 
 ```
 {
-	username,
-	password,
-	email
+  username,
+  password,
+  email
 }
 ```
 
@@ -58,11 +58,11 @@ JSON Response schema:
 
 ```
 {
-	token,
-	profile: {
-		username,
-		email
-	}
+  token,
+  profile: {
+    username,
+    email
+  }
 }
 ```
 
@@ -79,8 +79,8 @@ Request Body schema:
 
 ```
 {
-	username,
-	password
+  username,
+  password
 }
 ```
 
@@ -93,11 +93,11 @@ JSON Response schema:
 
 ```
 {
-	token,
-	profile: {
-		username,
-		email
-	}
+  token,
+  profile: {
+    username,
+    email
+  }
 }
 ```
 
@@ -159,9 +159,9 @@ JSON Response schema:
 
 ```
 {
-	"text": "Where is the library, Pedro?",
-	"from": "en",
-	"to": "es"
+  "text": "Where is the library, Pedro?",
+  "from": "en",
+  "to": "es"
 }
 ```
 
@@ -175,7 +175,7 @@ JSON Response schema:
 
 ```
 {
-	"result": "¿Dónde está la biblioteca, Pedro?"
+  "result": "¿Dónde está la biblioteca, Pedro?"
 }
 ```
 
