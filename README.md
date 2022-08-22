@@ -211,22 +211,7 @@ JSON Response:
     {
       boundingPoly: {
         normalizedVertices: [
-          {
-            x,
-            y
-          },
-          {
-            x,
-            y
-          },
-          {
-            x,
-            y
-          },
-          {
-            x,
-            y
-          },
+          {x,y}, {x,y}, {x,y}, {x,y},
         ]
       },
       mid,,
