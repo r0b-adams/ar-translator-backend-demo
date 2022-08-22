@@ -5,10 +5,9 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
-    "start:prod": "npm run transpile && node dist/index.js",
+    "start:prod": "node dist/index.js",
     "start:dev": "nodemon --exec ts-node src/index.ts",
-    "transpile": "tsc",
-    "seed": "ts-node src/db/seed.ts"
+    "postinstall": "tsc"
   },
   "repository": {
     "type": "git",
