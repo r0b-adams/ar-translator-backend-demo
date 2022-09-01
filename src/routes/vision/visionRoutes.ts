@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import Joi from 'joi';
 
 import { annotator, translator } from '../../google_apis/clients';
 import { authorize, validateReqBody } from '../../middleware';
@@ -11,14 +10,10 @@ router.post('/objects', authorize, validateReqBody, async (req, res, next) => {
   try {
     // grab target language and encoded data
     const { img, to } = req.body; // img arrives as a string of b64 encoded data
-    const [, b64encodedImage] = img.split(','); // ignore the MIME type and grab the b64 substr
-
-    // validate encoded img data
-    await Joi.string().base64().validateAsync(b64encodedImage);
 
     // query Google Vision API
     const [result] = await annotator.objectLocalization!({
-      image: { content: b64encodedImage },
+      image: { content: img },
     });
     const objects = result.localizedObjectAnnotations;
 
