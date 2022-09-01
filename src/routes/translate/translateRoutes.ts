@@ -21,7 +21,6 @@ router.post(
   async (req, res, next) => {
     try {
       const { text, from, to } = req.body;
-
       const [result] = await translator.translate(text, { from, to });
       res.status(200).json({ result });
     } catch (err) {
