@@ -74,7 +74,7 @@ router.post('/login', validateReqBody, async (req, res, next) => {
 });
 
 router.delete('/logout', authorize, (_req, res) => {
-  res.send(204).json({ message: 'logged out successfully!' });
+  res.status(204).json({ message: 'logged out successfully!' });
 });
 
 export default router;
