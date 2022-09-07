@@ -19,7 +19,7 @@ const schema = {
     username,
     password: Joi.string() // just check for truthiness on a login request
       .required()
-      .messages({ 'string.empty': 'password is required' }),
+      .messages({ 'string.empty': 'Password is required' }),
   }),
   POST_TRANSLATE: Joi.object({
     text,
