@@ -1,4 +1,5 @@
 data.json
+nodemon.json
 google_creds.json
 /dist
 /node_modules

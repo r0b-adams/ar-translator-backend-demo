@@ -5,7 +5,8 @@ import { AuthError, UniquenessError } from '../helpers/errors';
 
 /**
  * Joi validation can return err array of multiple failed checks
- * catch and return list of the err messages
+ *
+ * Catch and return list of the err messages
  */
 export const validationErrorHandler: ErrorRequestHandler = (
   err,
@@ -23,8 +24,8 @@ export const validationErrorHandler: ErrorRequestHandler = (
 
   if (err instanceof ValidationError || isJoiError) {
     const { details } = err as ValidationError;
-    const errors = details.map((detail) => detail.message);
-    res.status(400).json({ errors });
+    const error = details.map((detail) => detail.message);
+    res.status(400).json({ error });
   } else {
     next(err);
   }
@@ -51,7 +52,7 @@ export const otherErrorHandler: ErrorRequestHandler = (
   // catch all
   if (err instanceof Error) {
     console.log(err);
-    res.status(500).json({ error: 'internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
     return;
   }
 };
