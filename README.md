@@ -226,6 +226,7 @@ Request Body schema:
 JSON Response:
 
 ```
+[
     {
       boundingPoly: {
         normalizedVertices: [
@@ -235,13 +236,14 @@ JSON Response:
           {x4, y4},
         ]
       },
-      mid,,
+      mid,
       name,
       score,
       trgLangCode,
       translatedName,
     },
     ...
+]
 ```
 
 |                         property | description                                                                                                   |
